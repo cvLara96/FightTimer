@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">FightTimer</string>
+    <string name="app_config">Configura tu sparring</string>
+    <string name="app_rounds">Rounds</string>
+    <string name="app_time_rounds">Duracion del round</string>
+    <string name="app_time_rest">Duracion del descanso</string>
+    <string name="points">:</string>
+    <string name="btn_start">box</string>
+    <string name="btn_reset">reset</string>
+</resources>
