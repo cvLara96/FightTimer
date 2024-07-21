@@ -11,5 +11,6 @@
     <color name="reset_color">#FFFF8D</color>
     <color name="save_color">#84FFFF</color>
     <color name="crono_color">#ED4848</color>
+    <color name="back">#EC4A81</color>
 
 </resources>

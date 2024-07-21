@@ -210,7 +210,7 @@ class MainActivity : AppCompatActivity() {
 
     //Metodo que reestablece la IU
     private fun restart(){
-        currentRound = 3 //Por defecto mostrara 3 rounds
+        currentRound = 1 //Por defecto mostrara 1 rounds
         currentRoundMinutes = 0 //Por defecto mostrara 0 minuto
         currentRoundSeconds = 0 //Por defecto mostrara 0 segundos
         currentRestMinutes = 0 //Por defecto mostrara 0 minuto

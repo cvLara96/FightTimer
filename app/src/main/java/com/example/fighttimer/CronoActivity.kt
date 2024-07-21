@@ -3,6 +3,7 @@ package com.example.fighttimer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.fighttimer.MainActivity.Companion.MINUTE_REST_KEY
 import com.example.fighttimer.MainActivity.Companion.MINUTE_ROUND_KEY
@@ -32,6 +33,7 @@ class CronoActivity : AppCompatActivity() {
     // Variables para los periodos y rondas
     private var isRoundPeriod: Boolean = true
     private var roundsRemaining: Int = 0
+    private var totalRounds: Int = 0 // Variable para el total de rounds
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +49,7 @@ class CronoActivity : AppCompatActivity() {
         finalTimeRound = (minRound*60)+secRound
         finalTimeRest = (minRest*60)+secRest
         roundsRemaining = rounds
+        totalRounds = rounds
 
         initListener()
 
@@ -55,19 +58,36 @@ class CronoActivity : AppCompatActivity() {
 
     private fun initListener() {
         binding.btnStartFight.setOnClickListener {
-            if(!isRunning){
-                startTimer()
-            }else if(isPaused){
-                resumeTimer()
+            if(finalTimeRound == 0 &&finalTimeRest == 0){
+                Toast.makeText(this, "Primero debes configurar el tiempo de entrenamiento", Toast.LENGTH_SHORT).show()
+            }else{
+                if(!isRunning){
+                    startTimer()
+                }else if(isPaused){
+                    resumeTimer()
+                }
             }
         }
 
         binding.btnPausetFight.setOnClickListener {
-            pauseTimer()
+            if(finalTimeRound == 0 &&finalTimeRest == 0){
+                Toast.makeText(this, "Primero debes configurar el tiempo de entrenamiento", Toast.LENGTH_SHORT).show()
+            }else{
+                pauseTimer()
+            }
+
         }
 
         binding.btnStopFight.setOnClickListener {
-            stopTimer()
+            if(finalTimeRound == 0 && finalTimeRest == 0){
+                Toast.makeText(this, "Primero debes configurar el tiempo de entrenamiento", Toast.LENGTH_SHORT).show()
+            }else{
+                stopTimer()
+            }
+        }
+
+        binding.btnBack.setOnClickListener {
+            finish()
         }
 
     }
@@ -140,12 +160,18 @@ class CronoActivity : AppCompatActivity() {
     }
 
     private fun stopTimer() {
-        countDownTimer.cancel()
-        isRunning = false
-        isPaused = false
-        timeRemaining = 0L
-        roundsRemaining = 0
-        updateUI()
+        try {
+            countDownTimer?.cancel()
+            isRunning = false
+            isPaused = false
+            timeRemaining = 0L
+            roundsRemaining = 0
+            updateUI()
+
+        } catch (e: UninitializedPropertyAccessException) {
+            Toast.makeText(this, "El cronometro aun no se ha iniciado", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private fun updateUI() {
@@ -154,11 +180,14 @@ class CronoActivity : AppCompatActivity() {
         val minutes = totalSeconds / 60
         val seconds = totalSeconds % 60
 
+        //Para mostrar el round por el que vamos
+        val currenRound = totalRounds - roundsRemaining + 1
+
         binding.tvMinutes.text = String.format("%02d", minutes)
         binding.tvSeconds.text = String.format("%02d", seconds)
 
         if(isRoundPeriod){
-            binding.tvRound.text = "COMBATE \nROUNDS RESTANTES: $roundsRemaining"
+            binding.tvRound.text = "COMBATE \nROUND $currenRound"
             binding.tvRound.setTextColor(
                 ContextCompat.getColor(this, R.color.crono_color)
             )
@@ -172,7 +201,7 @@ class CronoActivity : AppCompatActivity() {
                 ContextCompat.getColor(this, R.color.crono_color)
             )
         }else{
-            binding.tvRound.text = "DESCANSO \nROUNDS RESTANTES: $roundsRemaining"
+            binding.tvRound.text = "DESCANSO \nQUEDAN ${roundsRemaining-1} ROUNDS"
             binding.tvRound.setTextColor(
                 ContextCompat.getColor(this, R.color.start_color)
             )
