@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     //Creamos las variables que necesitamos
-    private var currentRound : Int = 3 //Por defecto mostrara 3 rounds
+    private var currentRound : Int = 1 //Por defecto mostrara 1 round
     private var currentRoundMinutes : Int = 0 //Por defecto mostrara 0 minuto
     private var currentRoundSeconds : Int = 0 //Por defecto mostrara 0 segundos
     private var currentRestMinutes : Int = 0 //Por defecto mostrara 0 minuto
@@ -63,11 +63,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.subtractRound.setOnClickListener {
-            if(currentRound>0){
+            if(currentRound>1){
                 currentRound-=1
                 setRound()
             }else{
-                currentRound = 0
+                currentRound = 1
                 setRound()
                 Toast.makeText(this, "El numero de rounds no puede ser inferior a ${currentRound}", Toast.LENGTH_SHORT).show()
             }

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/border"
     android:orientation="vertical"
-    android:padding="6dp">
+    android:padding="8dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
         android:id="@+id/btnSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/start_color"
+        android:backgroundTint="@color/save_color"
         android:text="@string/save"
         android:textAllCaps="true"
         android:textColor="@color/background_app"

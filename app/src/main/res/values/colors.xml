@@ -4,9 +4,12 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="background_app">#2F3030</color>
+    <color name="background_app_crono">#5C5E5E</color>
     <color name="background_component">#2CE1B8</color>
     <color name="add">#2CE1B8</color>
     <color name="start_color">#6FD84A</color>
     <color name="reset_color">#FFFF8D</color>
+    <color name="save_color">#84FFFF</color>
+    <color name="crono_color">#ED4848</color>
 
 </resources>
