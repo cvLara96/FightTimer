@@ -7,4 +7,7 @@
     <string name="points">:</string>
     <string name="btn_start">box</string>
     <string name="btn_reset">reset</string>
+    <string name="settings_round">Configurar tiempo de round</string>
+    <string name="settings_rest">Configurar tiempo de descanso</string>
+    <string name="save">Guardar</string>
 </resources>

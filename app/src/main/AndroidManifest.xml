@@ -13,6 +13,9 @@
         android:theme="@style/Theme.FightTimer"
         tools:targetApi="34">
         <activity
+            android:name=".CronoActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
