@@ -3,6 +3,8 @@ package com.example.fighttimer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.fighttimer.MainActivity.Companion.MINUTE_REST_KEY
@@ -186,39 +188,45 @@ class CronoActivity : AppCompatActivity() {
         binding.tvMinutes.text = String.format("%02d", minutes)
         binding.tvSeconds.text = String.format("%02d", seconds)
 
+
         if(isRoundPeriod){
             binding.tvRound.text = "COMBATE \nROUND $currenRound"
-            binding.tvRound.setTextColor(
-                ContextCompat.getColor(this, R.color.crono_color)
+            updateColors(
+                binding.tvRound,
+                binding.tvMinutes,
+                binding.tvSeconds,
+                binding.tvPoints,
+                R.color.crono_color
             )
-            binding.tvMinutes.setTextColor(
-                ContextCompat.getColor(this, R.color.crono_color)
-            )
-            binding.tvSeconds.setTextColor(
-                ContextCompat.getColor(this, R.color.crono_color)
-            )
-            binding.tvPoints.setTextColor(
-                ContextCompat.getColor(this, R.color.crono_color)
-            )
+
         }else{
             binding.tvRound.text = "DESCANSO \nQUEDAN ${roundsRemaining-1} ROUNDS"
-            binding.tvRound.setTextColor(
-                ContextCompat.getColor(this, R.color.start_color)
-            )
-            binding.tvMinutes.setTextColor(
-                ContextCompat.getColor(this, R.color.start_color)
-            )
-            binding.tvSeconds.setTextColor(
-                ContextCompat.getColor(this, R.color.start_color)
-            )
-            binding.tvPoints.setTextColor(
-                ContextCompat.getColor(this, R.color.start_color)
+            updateColors(
+                binding.tvRound,
+                binding.tvMinutes,
+                binding.tvSeconds,
+                binding.tvPoints,
+                R.color.start_color
             )
         }
 
         if(roundsRemaining == 0){
             binding.tvRound.text = "SPARRING FINALIZADO"
-            binding.tvRound.setTextColor(
+            updateColors(
+                binding.tvRound,
+                binding.tvMinutes,
+                binding.tvSeconds,
+                binding.tvPoints,
+                R.color.background_component
+            )
+
+        }
+
+    }
+
+    //Metodo para no tener que repetir este bloque de codigo:
+    /*
+    binding.tvRound.setTextColor(
                 ContextCompat.getColor(this, R.color.background_component)
             )
             binding.tvMinutes.setTextColor(
@@ -230,9 +238,24 @@ class CronoActivity : AppCompatActivity() {
             binding.tvPoints.setTextColor(
                 ContextCompat.getColor(this, R.color.background_component)
             )
+     */
+    private fun updateColors(textRound : TextView,textMinutes : TextView,textSeconds : TextView,textPoints : TextView, color : Int) {
 
-        }
+        textRound.setTextColor(
+            ContextCompat.getColor(this, color)
+        )
 
+        textMinutes.setTextColor(
+            ContextCompat.getColor(this, color)
+        )
+
+        textSeconds.setTextColor(
+            ContextCompat.getColor(this, color)
+        )
+
+        textPoints.setTextColor(
+            ContextCompat.getColor(this, color)
+        )
 
     }
 
