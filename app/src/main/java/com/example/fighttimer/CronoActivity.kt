@@ -1,5 +1,6 @@
 package com.example.fighttimer
 
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -37,16 +38,35 @@ class CronoActivity : AppCompatActivity() {
     private var roundsRemaining: Int = 0
     private var totalRounds: Int = 0 // Variable para el total de rounds
 
+    // MediaPlayer para reproducir audio
+    private var mediaPlayerCampana: MediaPlayer? = null
+    private var mediaPlayerBox: MediaPlayer? = null
+    private var mediaPlayerBaquetas: MediaPlayer? = null
+    private var mediaPlayerStop: MediaPlayer? = null
+    private var mediaPlayerSegundosFuera: MediaPlayer? = null
+
+    //Variables para controlar si ha sonado el aviso de 10segs
+    private var isReproductedBaquetas: Boolean = false
+    private var isReproductedSegundosFuera: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCronoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Inicializar MediaPlayer con el archivo de audio
+        mediaPlayerCampana = MediaPlayer.create(this, R.raw.campana)
+        mediaPlayerBox = MediaPlayer.create(this, R.raw.box)
+        mediaPlayerBaquetas = MediaPlayer.create(this, R.raw.baquetas)
+        mediaPlayerStop = MediaPlayer.create(this, R.raw.stop)
+        mediaPlayerSegundosFuera = MediaPlayer.create(this, R.raw.segundos_fuera)
 
         val rounds = intent.extras?.getInt(ROUND_KEY) ?: 1
         val minRound = intent.extras?.getInt(MINUTE_ROUND_KEY) ?: 0
         val secRound = intent.extras?.getInt(SECONDS_ROUND_KEY) ?: 0
         val minRest = intent.extras?.getInt(MINUTE_REST_KEY) ?: 0
         val secRest = intent.extras?.getInt(SECONDS_REST_KEY) ?: 0
+
 
         finalTimeRound = (minRound*60)+secRound
         finalTimeRest = (minRest*60)+secRest
@@ -65,6 +85,7 @@ class CronoActivity : AppCompatActivity() {
             }else{
                 if(!isRunning){
                     startTimer()
+
                 }else if(isPaused){
                     resumeTimer()
                 }
@@ -76,6 +97,7 @@ class CronoActivity : AppCompatActivity() {
                 Toast.makeText(this, "Primero debes configurar el tiempo de entrenamiento", Toast.LENGTH_SHORT).show()
             }else{
                 pauseTimer()
+
             }
 
         }
@@ -98,6 +120,7 @@ class CronoActivity : AppCompatActivity() {
         if (roundsRemaining > 0) {
             isRunning = true
             isPaused = false
+            mediaPlayerCampana?.start()
             val initialTime = if (isRoundPeriod) finalTimeRound else finalTimeRest
             timeRemaining = initialTime * 1000L
 
@@ -107,6 +130,7 @@ class CronoActivity : AppCompatActivity() {
                 override fun onTick(millisUntilFinished: Long) {
                     timeRemaining = millisUntilFinished
                     updateUI()
+                    tenSeconds(millisUntilFinished)
                 }
 
                 override fun onFinish() {
@@ -116,6 +140,10 @@ class CronoActivity : AppCompatActivity() {
                         isRoundPeriod = true
                         roundsRemaining -= 1
                     }
+
+                    isReproductedBaquetas = false
+                    isReproductedSegundosFuera = false
+
                     if (roundsRemaining > 0 || !isRoundPeriod) {
                         startTimer()
                     } else {
@@ -129,6 +157,7 @@ class CronoActivity : AppCompatActivity() {
     private fun pauseTimer() {
         if (isRunning && !isPaused) {
             countDownTimer.cancel()
+            mediaPlayerStop?.start()
             isPaused = true
         }
     }
@@ -136,6 +165,7 @@ class CronoActivity : AppCompatActivity() {
     private fun resumeTimer() {
         isRunning = true
         isPaused = false
+        mediaPlayerBox?.start()
 
         updateUI()
 
@@ -143,6 +173,7 @@ class CronoActivity : AppCompatActivity() {
             override fun onTick(millisUntilFinished: Long) {
                 timeRemaining = millisUntilFinished
                 updateUI()
+                tenSeconds(millisUntilFinished)
             }
 
             override fun onFinish() {
@@ -152,6 +183,10 @@ class CronoActivity : AppCompatActivity() {
                     isRoundPeriod = true
                     roundsRemaining -= 1
                 }
+
+                isReproductedBaquetas = false
+                isReproductedSegundosFuera = false
+
                 if (roundsRemaining > 0 || !isRoundPeriod) {
                     startTimer()
                 } else {
@@ -257,6 +292,19 @@ class CronoActivity : AppCompatActivity() {
             ContextCompat.getColor(this, color)
         )
 
+    }
+
+    private fun tenSeconds(millisUntilFinished:Long){
+        // Reproducir el sonido de advertencia a los 10 segundos restantes
+        if (millisUntilFinished <= 10000) {
+            if (isRoundPeriod && !isReproductedBaquetas) {
+                isReproductedBaquetas = !isReproductedBaquetas
+                mediaPlayerBaquetas?.start()
+            } else if (!isRoundPeriod && !isReproductedSegundosFuera){
+                isReproductedSegundosFuera = !isReproductedSegundosFuera
+                mediaPlayerSegundosFuera?.start()
+            }
+        }
     }
 
 
